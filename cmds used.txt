@@ -1,0 +1,60 @@
+
+HADOOP INSTALLATION
+
+#####Hadoop Installation (Single node)
+ wget https://apache.cs.utah.edu/hadoop/common/hadoop-2.10.2/hadoop-2.10.2.tar.gz
+ tar xzf hadoop-2.10.2.tar.gz
+ mv hadoop-3.3.4 hadoop
+ sudo mv hadoop /usr/lib/hadoop
+ sudo vi ~/.bashrc
+
+Update bashrc file -
+
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export HADOOP_INSTALL=/home/radhika_vyas2/hadoop
+export PATH=$PATH:$HADOOP_INSTALL/bin
+export PATH=$PATH:$HADOOP_INSTALL/sbin
+export HADOOP_MAPRED_HOME=$HADOOP_INSTALL
+export HADOOP_COMMON_HOME=$HADOOP_INSTALL
+export HADOOP_HDFS_HOME=$HADOOP_INSTALL
+export YARN_HOME=$HADOOP_INSTALL
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_INSTALL/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_INSTALL/lib"
+export HADOOP_HOME_WARN_SUPPRESS=1
+export HADOOP_ROOT_LOGGER="WARN,DRFA"
+
+
+#running the bashrc file and applying the changes to the system
+ source ~/.bashrc
+
+#to check hadoop installation
+ hadoop version
+
+
+
+##For making directory in hadoop
+
+hadoop fs -mkdir -p rv/dataset
+
+## For loading uploaded dataset file in Hadoop
+
+hdfs dfs -put -f /home/radhika_vyas2/spamdataset.csv rv/dataset
+
+##### for creating external table in HIVE
+
+create external table if not exists sms_scam(Category string,SMS string)
+    > comment 'SMS SPAM DETECTION'
+    > row format delimited
+    > fields terminated by','
+    > stored as textfile
+    > location '/rv/dataset/';
+
+### to check table creation
+select*from sms_scam;
+
+##for selecting ham
+select*from sms_scam where Category='ham';
+
+
+
+
